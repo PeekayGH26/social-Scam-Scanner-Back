@@ -2,8 +2,12 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from transformers import pipeline
 import uvicorn
+import os
 
 app = FastAPI()
+
+# Read the environment variable right after creating the app instance
+allow_emulator = os.getenv("ALLOW_EMULATOR_TRAFFIC", "false")
 
 class ScamRequest(BaseModel):
     text: str
