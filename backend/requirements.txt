@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pydantic
+transformers
+torch
+# Add advanced libraries here as needed
+# transformers
+# torch
+# scikit-learn
