@@ -36,14 +36,21 @@ async def analyze_text(request: ScamRequest):
     label = model_prediction["label"]
     confidence_score = model_prediction["score"]
 
-    # 2. Extract specific threat keywords for the UI report chip mapping
-    keywords = ["urgent", "verify", "password", "bank", "suspicious", "click here", "free money"]
+    # 2. Broader, typo-aware scam markers (catches "clam", "prize", "won", etc.)
+    keywords = [
+        "urgent", "verify", "password", "bank", "suspicious", "click here", "free money",
+        "won", "prize", "lottery", "grand prize", "processing fee", "claim", "clam"
+    ]
     found_threats = [word for word in keywords if word in text.lower()]
 
-    # 3. Dynamic Warning Verdict Engine based on AI classification layers
+    # 3. Dynamic Hybrid Warning Verdict Engine
+    # If 3 or more high-risk threat terms appear together, force a scam warning immediately!
     if label == "negative" and confidence_score > 0.60:
         verdict = "🚨 Potential Scam Message 🚨"
-        safety_score = confidence_score
+        safety_score = max(confidence_score, 0.75)
+    elif len(found_threats) >= 3:
+        verdict = "🚨 Potential Scam Message 🚨"
+        safety_score = 0.85
     elif label == "neutral" or len(found_threats) > 0:
         verdict = "⚠️ Suspicious Risk Pattern Detected ⚠️"
         safety_score = 0.45
@@ -53,10 +60,9 @@ async def analyze_text(request: ScamRequest):
 
     return {
         "text": text,
-        "safety_score": round(float(safety_score), 3),
+        "safety_score": round(float(safety_score), 2),
         "verdict": verdict,
         "threat_tags": found_threats
     }
-
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
