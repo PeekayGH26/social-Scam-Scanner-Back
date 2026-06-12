@@ -44,7 +44,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     // Google ML Kit Text Recognition (OCR Engine)
     implementation("com.google.android.gms:play-services-mlkit-text-recognition:19.0.1")
-
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     // LiteRT (formerly TensorFlow Lite)
     implementation("com.google.ai.edge.litert:litert:2.1.5")
 }
