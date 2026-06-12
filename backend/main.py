@@ -14,8 +14,7 @@ class ScamRequest(BaseModel):
 
 # Initialize the Hugging Face AI pipeline using a mobile-optimized classification model
 # Render will automatically download this model into memory during deployment
-ai_classifier = pipeline("text-classification", model="mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis")
-
+ai_classifier = pipeline("text-classification", model="pinnacleai/tiny-spam-detector-v2")
 @app.get("/")
 async def root():
     return {"message": "Social Scam Scanner Backend is running live via Hugging Face AI!"}
